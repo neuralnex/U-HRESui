@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '../../components/layout/MainLayout';
 import { Card } from '../../components/common/Card';
@@ -7,7 +7,7 @@ import { Input } from '../../components/common/Input';
 import { WebcamCapture } from '../../components/common/WebcamCapture';
 import { uhidService } from '../../services/uhid.service';
 import type { CreateUHIDData } from '../../services/uhid.service';
-import { CheckCircle, AlertCircle, Camera } from 'lucide-react';
+import { CheckCircle, AlertCircle, Camera, Upload } from 'lucide-react';
 import './CreateUHID.css';
 
 export const CreateUHID: React.FC = () => {
@@ -30,6 +30,7 @@ export const CreateUHID: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [createdUHID, setCreatedUHID] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,16 +170,44 @@ export const CreateUHID: React.FC = () => {
             <div className="profile-picture-section">
               <label className="input-label">Profile Picture *</label>
               {!showWebcam && !formData.profilePicture && (
-                <div className="webcam-trigger">
-                  <Button
-                    variant="secondary"
-                    icon={<Camera size={16} />}
-                    onClick={() => setShowWebcam(true)}
-                  >
-                    Capture Photo
-                  </Button>
+                <div className="picture-options">
+                  <div className="picture-option-buttons">
+                    <Button
+                      variant="secondary"
+                      icon={<Camera size={16} />}
+                      onClick={() => setShowWebcam(true)}
+                      fullWidth
+                    >
+                      Capture Photo
+                    </Button>
+                    <Button
+                      variant="outline"
+                      icon={<Upload size={16} />}
+                      onClick={() => fileInputRef.current?.click()}
+                      fullWidth
+                    >
+                      Upload Photo
+                    </Button>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setFormData({ ...formData, profilePicture: reader.result as string });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
                   <p className="text-small text-light">
-                    Take a photo using your webcam for patient identification
+                    Take a photo or upload an existing image for patient identification
                   </p>
                 </div>
               )}
@@ -196,13 +225,39 @@ export const CreateUHID: React.FC = () => {
               {formData.profilePicture && !showWebcam && (
                 <div className="profile-preview">
                   <img src={formData.profilePicture} alt="Profile" className="profile-image" />
-                  <Button
-                    variant="outline"
-                    icon={<Camera size={16} />}
-                    onClick={() => setShowWebcam(true)}
-                  >
-                    Retake Photo
-                  </Button>
+                  <div className="profile-actions">
+                    <Button
+                      variant="outline"
+                      icon={<Camera size={16} />}
+                      onClick={() => setShowWebcam(true)}
+                    >
+                      Retake
+                    </Button>
+                    <Button
+                      variant="outline"
+                      icon={<Upload size={16} />}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      Change
+                    </Button>
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setFormData({ ...formData, profilePicture: reader.result as string });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
                 </div>
               )}
             </div>

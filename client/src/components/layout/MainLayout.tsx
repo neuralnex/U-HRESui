@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 import { useAuth } from '../../contexts/AuthContext';
@@ -17,11 +17,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
 }) => {
   const { user } = useAuth();
   const displayName = hospitalName || user?.name;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="main-layout">
-      <Navbar hospitalName={displayName} />
-      <Sidebar role={role} />
+      <Navbar hospitalName={displayName} onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar role={role} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
       <main className="main-content">
         {children}
       </main>

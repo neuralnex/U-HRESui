@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Bell, User, LogOut } from 'lucide-react';
+import { Search, Bell, User, LogOut, Menu } from 'lucide-react';
 import { Input } from '../common/Input';
 import { useAuth } from '../../contexts/AuthContext';
 import './Navbar.css';
@@ -10,6 +10,7 @@ interface NavbarProps {
   onSearch?: (query: string) => void;
   onNotificationClick?: () => void;
   onProfileClick?: () => void;
+  onMenuToggle?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -17,6 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSearch,
   onNotificationClick,
   onProfileClick,
+  onMenuToggle,
 }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -37,6 +39,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <nav className="navbar">
       <div className="navbar-left">
+        <button className="navbar-menu-toggle" onClick={onMenuToggle}>
+          <Menu size={24} />
+        </button>
         <div className="navbar-logo">
           <span className="logo-text">🏥 {displayName}</span>
         </div>

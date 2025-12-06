@@ -16,3 +16,27 @@
   box-sizing: border-box;
 }
 
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: var(--spacing-m);
+    margin-top: var(--navbar-height);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 94;
+  }
+}
+

@@ -119,3 +119,47 @@
   background-color: var(--color-hover-bg);
 }
 
+.navbar-menu-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 var(--spacing-m);
+  }
+
+  .navbar-logo {
+    min-width: auto;
+  }
+
+  .logo-text {
+    font-size: var(--font-size-body);
+  }
+
+  .navbar-search {
+    display: none;
+  }
+
+  .navbar-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    color: var(--color-text-dark);
+    transition: all var(--transition-fast) var(--transition-ease);
+  }
+
+  .navbar-menu-toggle:hover {
+    background-color: var(--color-hover-bg);
+  }
+
+  .navbar-right {
+    gap: var(--spacing-s);
+  }
+}
+

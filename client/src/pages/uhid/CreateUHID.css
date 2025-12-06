@@ -70,6 +70,18 @@
   gap: var(--spacing-m);
 }
 
+.picture-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.picture-option-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-m);
+}
+
 .webcam-trigger {
   display: flex;
   flex-direction: column;
@@ -99,6 +111,13 @@
   background-color: var(--color-hover-bg);
 }
 
+.profile-actions {
+  display: flex;
+  gap: var(--spacing-m);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .profile-image {
   width: 200px;
   height: 200px;
@@ -115,6 +134,27 @@
   .profile-image {
     width: 150px;
     height: 150px;
+  }
+
+  .picture-option-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .profile-actions button {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
   }
 }
 

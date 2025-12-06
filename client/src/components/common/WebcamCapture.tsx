@@ -33,9 +33,14 @@ export const WebcamCapture: React.FC<WebcamCaptureProps> = ({
 
   const startCamera = async () => {
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: 640, height: 480 },
-      });
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const constraints: MediaStreamConstraints = {
+        video: isMobile 
+          ? { facingMode: { ideal: 'environment' } }
+          : { facingMode: 'user', width: 640, height: 480 },
+      };
+      
+      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       setStream(mediaStream);
       setIsCapturing(true);
       if (videoRef.current) {

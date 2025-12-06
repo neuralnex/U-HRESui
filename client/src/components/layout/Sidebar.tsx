@@ -19,6 +19,8 @@ interface SidebarItem {
 
 interface SidebarProps {
   role: 'doctor' | 'admin' | 'lab' | 'central';
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const doctorMenu: SidebarItem[] = [
@@ -54,7 +56,7 @@ const labMenu: SidebarItem[] = [
   { icon: <Settings size={20} />, label: 'Settings', path: '/lab/settings' },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({ role }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ role, isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -76,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ role }) => {
   const menu = getMenu();
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <nav className="sidebar-nav">
         {menu.map((item) => {
           const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
