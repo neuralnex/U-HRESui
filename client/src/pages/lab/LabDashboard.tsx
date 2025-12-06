@@ -5,7 +5,6 @@ import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { Badge } from '../../components/common/Badge';
 import { Upload, CheckCircle } from 'lucide-react';
-import { patientService } from '../../services/patient.service';
 import './LabDashboard.css';
 
 export const LabDashboard: React.FC = () => {

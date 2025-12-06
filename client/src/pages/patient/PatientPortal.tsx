@@ -78,7 +78,7 @@ export const PatientPortal: React.FC = () => {
               className="input"
               style={{ marginTop: '1rem', padding: '0.75rem', width: '100%' }}
             />
-            <Button variant="primary" onClick={loadPatientData} style={{ marginTop: '1rem' }}>
+            <Button variant="primary" onClick={loadPatientData} className="m-t">
               Load Records
             </Button>
           </div>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { MainLayout } from '../../components/layout/MainLayout';
 import { Card } from '../../components/common/Card';
 import { Badge } from '../../components/common/Badge';
-import { Button } from '../../components/common/Button';
 import { Building2, Activity, Brain, DollarSign } from 'lucide-react';
 import { adminService } from '../../services/admin.service';
 import { hospitalService } from '../../services/hospital.service';

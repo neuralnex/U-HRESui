@@ -5,8 +5,6 @@ import { MainLayout } from '../../components/layout/MainLayout';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
-import { patientService } from '../../services/patient.service';
-import { aiService } from '../../services/ai.service';
 import './DoctorDashboard.css';
 
 export const DoctorDashboard: React.FC = () => {
