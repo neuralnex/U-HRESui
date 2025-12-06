@@ -1,12 +1,12 @@
 import axios, { type AxiosInstance, type AxiosError } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://u-hres.onrender.com/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 class ApiService {
   private api: AxiosInstance;
 
   constructor() {
-    const baseURL = API_BASE_URL?.trim() || 'https://u-hres.onrender.com/api/v1';
+    const baseURL = API_BASE_URL?.trim() || '';
     
     console.log('API Base URL:', baseURL);
     console.log('VITE_API_URL from env:', import.meta.env.VITE_API_URL);

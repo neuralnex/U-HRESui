@@ -175,7 +175,7 @@ export const RegisterHospital: React.FC = () => {
             </Button>
 
             <p className="register-footer text-small text-light">
-              Already registered? <a href="/login">Login here</a>
+              Already registered? <a href="/login" onClick={(e) => { e.preventDefault(); navigate('/login'); }}>Login here</a>
             </p>
           </form>
         </Card>

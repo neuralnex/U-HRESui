@@ -25,14 +25,14 @@ export const Login: React.FC = () => {
     try {
       let credentials: any;
 
-      if (role === 'central' || role === 'admin') {
+      if (role === 'central') {
         credentials = {
-          username: email || hospitalCode,
+          username: email,
           password: password,
         };
       } else {
         credentials = {
-          hospitalCode: hospitalCode || email,
+          hospitalCode: hospitalCode,
           apiKey: apiKey || undefined,
         };
       }
@@ -97,7 +97,7 @@ export const Login: React.FC = () => {
               </button>
             </div>
 
-            {(role === 'central' || role === 'admin') ? (
+            {role === 'central' ? (
               <>
                 <Input
                   label="Username"
@@ -154,7 +154,7 @@ export const Login: React.FC = () => {
               Forgot hospital code? <a href="#" onClick={(e) => { e.preventDefault(); /* TODO: Implement forgot code */ }}>Recover here</a>
             </p>
             <p className="login-footer text-small text-light">
-              New hospital? <a href="/register">Register here</a>
+              New hospital? <a href="/register" onClick={(e) => { e.preventDefault(); navigate('/register'); }}>Register here</a>
             </p>
           </div>
         </Card>

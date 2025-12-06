@@ -24,13 +24,15 @@ export const HospitalAdminDashboard: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to load dashboard:', error);
+      setDashboardStats(null);
     }
   };
+  
   const stats = [
-    { label: 'Total Hospitals', value: dashboardStats?.totalHospitals || '0', icon: <Users size={24} />, color: 'primary' },
-    { label: 'Active Hospitals', value: dashboardStats?.activeHospitals || '0', icon: <Activity size={24} />, color: 'success' },
-    { label: 'Verified Hospitals', value: dashboardStats?.verifiedHospitals || '0', icon: <Send size={24} />, color: 'info' },
-    { label: 'Pending Verification', value: dashboardStats?.unverifiedHospitals || '0', icon: <FileText size={24} />, color: 'warning' },
+    { label: 'Total Patients', value: dashboardStats?.totalPatients || '0', icon: <Users size={24} />, color: 'primary' },
+    { label: 'Active Visits', value: dashboardStats?.activeVisits || '0', icon: <Activity size={24} />, color: 'success' },
+    { label: 'Lab Results', value: dashboardStats?.labResults || '0', icon: <Send size={24} />, color: 'info' },
+    { label: 'Prescriptions', value: dashboardStats?.prescriptions || '0', icon: <FileText size={24} />, color: 'warning' },
   ];
 
   const [recentTransfers, setRecentTransfers] = useState<any[]>([]);

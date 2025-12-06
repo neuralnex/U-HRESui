@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       let response: AuthResponse;
 
-      if (role === 'central' || role === 'admin') {
+      if (role === 'central') {
         response = await authService.loginAdmin(credentials);
         if (response.success && response.data.admin) {
           const admin = response.data.admin;
@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             username: admin.username,
             name: `${admin.firstName} ${admin.lastName}`,
             email: admin.email,
-            role: role === 'central' ? 'central' : 'admin',
+            role: 'central',
             permissions: admin.permissions,
             isSuperAdmin: admin.isSuperAdmin,
           };
@@ -72,7 +72,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             hospitalCode: hospital.hospitalCode,
             name: hospital.name,
             email: hospital.email,
-            role: role === 'lab' ? 'lab' : 'doctor',
+            role: role === 'lab' ? 'lab' : role === 'admin' ? 'admin' : 'doctor',
           };
           setUser(userData);
           setToken(response.data.token);
