@@ -80,7 +80,7 @@ export const PatientProfile: React.FC = () => {
   ];
 
   return (
-    <MainLayout role="doctor" hospitalName="General Hospital Lagos">
+    <MainLayout role="doctor">
       <div className="patient-profile">
         <div className="patient-header">
           <div className="patient-basic-info">

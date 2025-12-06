@@ -38,7 +38,7 @@ export const HospitalAdminDashboard: React.FC = () => {
   const [recentTransfers, setRecentTransfers] = useState<any[]>([]);
 
   return (
-    <MainLayout role="admin" hospitalName="General Hospital Lagos">
+    <MainLayout role="admin">
       <div className="admin-dashboard">
         <div className="dashboard-header">
           <h1 className="text-page-title">Hospital Admin Dashboard</h1>

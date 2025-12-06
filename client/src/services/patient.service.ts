@@ -49,5 +49,10 @@ export const patientService = {
     const response = await api.post(`/patients/${uhid}/visits`, data);
     return response.data;
   },
+
+  async getPatientVisits(uhid: string, limit: number = 50) {
+    const response = await api.get(`/patients/${uhid}/visits?limit=${limit}`);
+    return response.data;
+  },
 };
 
