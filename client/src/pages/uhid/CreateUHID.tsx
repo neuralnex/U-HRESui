@@ -46,7 +46,8 @@ export const CreateUHID: React.FC = () => {
         }, 2000);
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to create UHID');
+      const errorMessage = err.response?.data?.error?.message || err.response?.data?.message || err.message || 'Failed to create UHID';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
