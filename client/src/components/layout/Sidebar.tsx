@@ -77,6 +77,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ role, isOpen, onClose }) => {
 
   const menu = getMenu();
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <nav className="sidebar-nav">
@@ -86,7 +93,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ role, isOpen, onClose }) => {
             <button
               key={item.path}
               className={`sidebar-item ${isActive ? 'sidebar-item-active' : ''}`}
-              onClick={() => navigate(item.path)}
+              onClick={() => handleNavigation(item.path)}
             >
               <span className="sidebar-icon">{item.icon}</span>
               <span className="sidebar-label">{item.label}</span>
