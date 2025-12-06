@@ -67,10 +67,27 @@ export const WebcamCapture: React.FC<WebcamCaptureProps> = ({
       const context = canvas.getContext('2d');
 
       if (context) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0);
-        const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        const maxWidth = 800;
+        const maxHeight = 800;
+        let width = video.videoWidth;
+        let height = video.videoHeight;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
+        const imageDataUrl = canvas.toDataURL('image/jpeg', 0.7);
         setCapturedImage(imageDataUrl);
         stopCamera();
         onCapture(imageDataUrl);

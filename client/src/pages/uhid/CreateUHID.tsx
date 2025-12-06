@@ -32,6 +32,45 @@ export const CreateUHID: React.FC = () => {
   const [createdUHID, setCreatedUHID] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const compressImage = (dataUrl: string, callback: (compressed: string) => void) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxWidth = 800;
+      const maxHeight = 800;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressed = canvas.toDataURL('image/jpeg', 0.7);
+        callback(compressed);
+      } else {
+        callback(dataUrl);
+      }
+    };
+    img.onerror = () => {
+      callback(dataUrl);
+    };
+    img.src = dataUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -200,7 +239,10 @@ export const CreateUHID: React.FC = () => {
                       if (file) {
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                          setFormData({ ...formData, profilePicture: reader.result as string });
+                          const imageDataUrl = reader.result as string;
+                          compressImage(imageDataUrl, (compressed) => {
+                            setFormData({ ...formData, profilePicture: compressed });
+                          });
                         };
                         reader.readAsDataURL(file);
                       }
@@ -215,8 +257,10 @@ export const CreateUHID: React.FC = () => {
                 <div className="webcam-container">
                   <WebcamCapture
                     onCapture={(imageDataUrl) => {
-                      setFormData({ ...formData, profilePicture: imageDataUrl });
-                      setShowWebcam(false);
+                      compressImage(imageDataUrl, (compressed) => {
+                        setFormData({ ...formData, profilePicture: compressed });
+                        setShowWebcam(false);
+                      });
                     }}
                     onCancel={() => setShowWebcam(false)}
                   />
@@ -252,7 +296,10 @@ export const CreateUHID: React.FC = () => {
                       if (file) {
                         const reader = new FileReader();
                         reader.onloadend = () => {
-                          setFormData({ ...formData, profilePicture: reader.result as string });
+                          const imageDataUrl = reader.result as string;
+                          compressImage(imageDataUrl, (compressed) => {
+                            setFormData({ ...formData, profilePicture: compressed });
+                          });
                         };
                         reader.readAsDataURL(file);
                       }
