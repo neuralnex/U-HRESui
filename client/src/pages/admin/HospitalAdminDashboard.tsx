@@ -18,6 +18,9 @@ export const HospitalAdminDashboard: React.FC = () => {
       const response = await adminService.getDashboard();
       if (response.success) {
         setDashboardStats(response.data);
+        if (response.data.recentTransfers) {
+          setRecentTransfers(response.data.recentTransfers);
+        }
       }
     } catch (error) {
       console.error('Failed to load dashboard:', error);
@@ -30,10 +33,7 @@ export const HospitalAdminDashboard: React.FC = () => {
     { label: 'Pending Verification', value: dashboardStats?.unverifiedHospitals || '0', icon: <FileText size={24} />, color: 'warning' },
   ];
 
-  const recentTransfers = [
-    { hospital: 'Lagos General', patient: 'UHID-20240115-00001', date: '2024-01-15', status: 'completed' },
-    { hospital: 'Abuja Medical', patient: 'UHID-20240115-00002', date: '2024-01-14', status: 'pending' },
-  ];
+  const [recentTransfers, setRecentTransfers] = useState<any[]>([]);
 
   return (
     <MainLayout role="admin" hospitalName="General Hospital Lagos">
@@ -62,37 +62,42 @@ export const HospitalAdminDashboard: React.FC = () => {
         <div className="dashboard-grid">
           <Card title="Interoperability Monitor" subtitle="Connection status with other hospitals">
             <div className="interoperability-list">
-              <div className="interop-item">
-                <div className="interop-info">
-                  <strong>Lagos General Hospital</strong>
-                  <span className="text-small text-light">Connected</span>
-                </div>
-                <Badge variant="success">Active</Badge>
-              </div>
-              <div className="interop-item">
-                <div className="interop-info">
-                  <strong>Abuja Medical Center</strong>
-                  <span className="text-small text-light">Connected</span>
-                </div>
-                <Badge variant="success">Active</Badge>
-              </div>
+              {dashboardStats?.connectedHospitals && dashboardStats.connectedHospitals.length > 0 ? (
+                dashboardStats.connectedHospitals.map((hospital: any, index: number) => (
+                  <div key={index} className="interop-item">
+                    <div className="interop-info">
+                      <strong>{hospital.name}</strong>
+                      <span className="text-small text-light">{hospital.status || 'Connected'}</span>
+                    </div>
+                    <Badge variant={hospital.isActive ? 'success' : 'warning'}>
+                      {hospital.isActive ? 'Active' : 'Inactive'}
+                    </Badge>
+                  </div>
+                ))
+              ) : (
+                <p className="text-small text-light">No connected hospitals</p>
+              )}
             </div>
           </Card>
 
           <Card title="Recent Inter-hospital Transfers" subtitle="Last 5 transfers">
             <div className="transfers-list">
-              {recentTransfers.map((transfer, index) => (
-                <div key={index} className="transfer-item">
-                  <div className="transfer-info">
-                    <strong>{transfer.hospital}</strong>
-                    <span className="text-small text-mono text-light">{transfer.patient}</span>
-                    <span className="text-small text-light">{transfer.date}</span>
+              {recentTransfers.length > 0 ? (
+                recentTransfers.map((transfer, index) => (
+                  <div key={index} className="transfer-item">
+                    <div className="transfer-info">
+                      <strong>{transfer.hospital || transfer.hospitalName || 'Unknown'}</strong>
+                      <span className="text-small text-mono text-light">{transfer.patient || transfer.uhid || 'N/A'}</span>
+                      <span className="text-small text-light">{transfer.date || transfer.createdAt || 'N/A'}</span>
+                    </div>
+                    <Badge variant={transfer.status === 'completed' ? 'success' : 'warning'}>
+                      {transfer.status || 'pending'}
+                    </Badge>
                   </div>
-                  <Badge variant={transfer.status === 'completed' ? 'success' : 'warning'}>
-                    {transfer.status}
-                  </Badge>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-small text-light">No recent transfers</p>
+              )}
             </div>
           </Card>
         </div>
@@ -101,19 +106,19 @@ export const HospitalAdminDashboard: React.FC = () => {
           <div className="billing-stats">
             <div className="billing-item">
               <span>API Calls</span>
-              <strong>12,456</strong>
+              <strong>{dashboardStats?.apiCalls || '0'}</strong>
             </div>
             <div className="billing-item">
               <span>Inter-hospital Transfers</span>
-              <strong>89</strong>
+              <strong>{dashboardStats?.transfers || recentTransfers.length}</strong>
             </div>
             <div className="billing-item">
               <span>AI Module Usage</span>
-              <strong>234</strong>
+              <strong>{dashboardStats?.aiUsage || '0'}</strong>
             </div>
             <div className="billing-item billing-total">
               <span>Total Cost</span>
-              <strong>₦45,230</strong>
+              <strong>{dashboardStats?.totalCost ? `₦${dashboardStats.totalCost.toLocaleString()}` : '₦0'}</strong>
             </div>
           </div>
         </Card>

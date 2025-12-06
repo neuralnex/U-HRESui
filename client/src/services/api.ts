@@ -1,13 +1,18 @@
 import axios, { type AxiosInstance, type AxiosError } from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ;
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://u-hres.onrender.com/api/v1';
 
 class ApiService {
   private api: AxiosInstance;
 
   constructor() {
+    const baseURL = API_BASE_URL?.trim() || 'https://u-hres.onrender.com/api/v1';
+    
+    console.log('API Base URL:', baseURL);
+    console.log('VITE_API_URL from env:', import.meta.env.VITE_API_URL);
+    
     this.api = axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: baseURL,
       headers: {
         'Content-Type': 'application/json',
       },

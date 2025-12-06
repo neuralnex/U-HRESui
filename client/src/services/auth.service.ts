@@ -34,8 +34,16 @@ export interface AuthResponse {
 
 export const authService = {
   async registerHospital(data: HospitalRegisterData) {
-    const response = await api.post('/auth/register', data);
-    return response.data;
+    console.log('Registering hospital with data:', data);
+    console.log('API base URL:', api.defaults.baseURL);
+    try {
+      const response = await api.post('/auth/register', data);
+      return response.data;
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      console.error('Error response:', error.response);
+      throw error;
+    }
   },
 
   async loginHospital(data: HospitalLoginData): Promise<AuthResponse> {
