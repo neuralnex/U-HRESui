@@ -1,0 +1,109 @@
+.ai-insights {
+  max-width: var(--max-page-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.ai-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.analysis-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--spacing-m);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-body);
+  resize: vertical;
+  min-height: 200px;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(28, 109, 208, 0.1);
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-m);
+  width: 100%;
+  min-height: 200px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition: all var(--transition-normal) var(--transition-ease);
+  color: var(--color-text-light);
+}
+
+.file-upload-label:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-hover-bg);
+  color: var(--color-primary);
+}
+
+.error-display {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+  padding: var(--spacing-m);
+  background-color: rgba(217, 83, 79, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-button);
+  color: var(--color-error);
+}
+
+.results-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.result-section {
+  padding: var(--spacing-l);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-button);
+}
+
+.result-section h3 {
+  margin-bottom: var(--spacing-m);
+}
+
+.analysis-html {
+  line-height: var(--line-height-body);
+}
+
+.analysis-html ul {
+  margin-left: var(--spacing-xl);
+  margin-top: var(--spacing-m);
+}
+
+.visualization-image {
+  max-width: 100%;
+  border-radius: var(--radius-button);
+  margin-top: var(--spacing-m);
+}
+
+@media (max-width: 1024px) {
+  .ai-tabs {
+    grid-template-columns: 1fr;
+  }
+}
+

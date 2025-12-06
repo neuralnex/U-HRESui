@@ -1,0 +1,18 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-content {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--navbar-height);
+  padding: var(--content-padding);
+  min-height: calc(100vh - var(--navbar-height));
+  background-color: var(--color-background);
+  width: calc(100% - var(--sidebar-width));
+  box-sizing: border-box;
+}
+

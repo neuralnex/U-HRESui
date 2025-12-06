@@ -1,0 +1,106 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-cyan) 100%);
+  padding: var(--spacing-xl);
+}
+
+.register-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xxl);
+  color: var(--color-white);
+}
+
+.register-header h1 {
+  color: var(--color-white);
+  margin-bottom: var(--spacing-s);
+}
+
+.register-header p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.register-card {
+  padding: var(--spacing-xxl);
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-l);
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+  padding: var(--spacing-m);
+  background-color: rgba(217, 83, 79, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-button);
+  color: var(--color-error);
+  font-size: var(--font-size-small);
+}
+
+.register-footer {
+  text-align: center;
+  margin-top: var(--spacing-m);
+}
+
+.register-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}
+
+.success-card {
+  padding: var(--spacing-xxl);
+}
+
+.success-content {
+  text-align: center;
+}
+
+.success-icon {
+  color: var(--color-success);
+  margin-bottom: var(--spacing-l);
+}
+
+.success-content h1 {
+  margin-bottom: var(--spacing-m);
+}
+
+.hospital-code-display {
+  margin: var(--spacing-xxl) 0;
+  padding: var(--spacing-xl);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-card);
+  border: 2px solid var(--color-primary);
+}
+
+.hospital-code-display p {
+  margin-bottom: var(--spacing-s);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+

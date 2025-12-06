@@ -1,0 +1,121 @@
+.navbar {
+  height: var(--navbar-height);
+  width: 100%;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-low);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--content-padding);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex: 1;
+}
+
+.navbar-logo {
+  min-width: 180px;
+}
+
+.logo-text {
+  font-size: var(--font-size-section-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.navbar-search {
+  flex: 1;
+  max-width: 400px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+}
+
+.navbar-icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  color: var(--color-text-dark);
+  transition: all var(--transition-fast) var(--transition-ease);
+}
+
+.navbar-icon-btn:hover {
+  background-color: var(--color-hover-bg);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: var(--color-error);
+  color: var(--color-white);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+}
+
+.navbar-profile {
+  position: relative;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--spacing-s);
+  background-color: var(--color-white);
+  border-radius: var(--radius-button);
+  box-shadow: var(--shadow-medium);
+  min-width: 150px;
+  padding: var(--spacing-s);
+  display: none;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.navbar-profile:hover .profile-dropdown {
+  display: flex;
+}
+
+.profile-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+  padding: var(--spacing-s) var(--spacing-m);
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-button);
+  font-size: var(--font-size-small);
+  color: var(--color-text-dark);
+  transition: all var(--transition-fast) var(--transition-ease);
+}
+
+.profile-dropdown button:hover {
+  background-color: var(--color-hover-bg);
+}
+

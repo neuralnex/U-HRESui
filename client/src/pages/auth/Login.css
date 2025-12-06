@@ -1,0 +1,98 @@
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-cyan) 100%);
+  padding: var(--spacing-xl);
+  box-sizing: border-box;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xxl);
+  color: var(--color-white);
+}
+
+.login-header h1 {
+  color: var(--color-white);
+  margin-bottom: var(--spacing-s);
+}
+
+.login-header p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.login-card {
+  padding: var(--spacing-xxl);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.role-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-s);
+  margin-bottom: var(--spacing-m);
+}
+
+.role-btn {
+  padding: var(--spacing-m);
+  border: 2px solid var(--color-border);
+  background: transparent;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-dark);
+  transition: all var(--transition-fast) var(--transition-ease);
+}
+
+.role-btn:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-hover-bg);
+}
+
+.role-btn.active {
+  border-color: var(--color-primary);
+  background-color: var(--color-active-bg);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: var(--spacing-m);
+}
+
+.login-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+  padding: var(--spacing-m);
+  background-color: rgba(217, 83, 79, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-button);
+  color: var(--color-error);
+  font-size: var(--font-size-small);
+}
+

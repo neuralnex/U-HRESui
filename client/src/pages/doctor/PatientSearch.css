@@ -1,0 +1,69 @@
+.patient-search {
+  max-width: var(--max-page-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.search-container {
+  display: flex;
+  gap: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
+}
+
+.search-error {
+  padding: var(--spacing-m);
+  background-color: rgba(217, 83, 79, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-button);
+  color: var(--color-error);
+  font-size: var(--font-size-small);
+  margin-top: var(--spacing-m);
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+  margin-top: var(--spacing-l);
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-l);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-button);
+  transition: all var(--transition-normal) var(--transition-ease);
+}
+
+.result-item:hover {
+  background-color: var(--color-active-bg);
+}
+
+.result-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-l);
+}
+
+.result-info h3 {
+  margin-bottom: var(--spacing-xs);
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column;
+  }
+
+  .result-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-m);
+  }
+}
+

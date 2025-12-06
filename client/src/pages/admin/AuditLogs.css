@@ -1,0 +1,111 @@
+.audit-logs {
+  max-width: var(--max-page-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.audit-search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.search-type-selector {
+  display: flex;
+  gap: var(--spacing-s);
+}
+
+.type-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+  padding: var(--spacing-m);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  color: var(--color-text-dark);
+  transition: all var(--transition-fast) var(--transition-ease);
+}
+
+.type-btn:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-hover-bg);
+}
+
+.type-btn.active {
+  border-color: var(--color-primary);
+  background-color: var(--color-active-bg);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.search-input-group {
+  display: flex;
+  gap: var(--spacing-m);
+}
+
+.search-btn {
+  padding: 12px 24px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal) var(--transition-ease);
+}
+
+.search-btn:hover:not(:disabled) {
+  background-color: #1557B0;
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logs-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 200px 120px 1fr 150px 100px;
+  gap: var(--spacing-m);
+  padding: var(--spacing-m);
+  background-color: var(--color-table-header);
+  border-radius: var(--radius-button);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-small);
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 200px 120px 1fr 150px 100px;
+  gap: var(--spacing-m);
+  padding: var(--spacing-m);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-button);
+  transition: all var(--transition-fast) var(--transition-ease);
+}
+
+.table-row:hover {
+  background-color: var(--color-active-bg);
+}
+
+@media (max-width: 1024px) {
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-s);
+  }
+}
+

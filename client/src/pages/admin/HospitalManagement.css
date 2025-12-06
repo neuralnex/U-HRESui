@@ -1,0 +1,61 @@
+.hospital-management {
+  max-width: var(--max-page-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.pending-hospitals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
+}
+
+.search-bar {
+  margin-bottom: var(--spacing-l);
+}
+
+.hospitals-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.hospital-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-l);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-button);
+}
+
+.hospital-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.hospital-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+  margin-bottom: var(--spacing-xs);
+}
+
+.hospital-actions {
+  display: flex;
+  gap: var(--spacing-m);
+}
+
+.bulk-actions {
+  margin-top: var(--spacing-l);
+  padding-top: var(--spacing-l);
+  border-top: 1px solid var(--color-border);
+}
+

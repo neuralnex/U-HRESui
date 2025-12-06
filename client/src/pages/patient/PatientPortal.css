@@ -1,0 +1,113 @@
+.patient-portal {
+  max-width: var(--max-page-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--content-padding);
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+.portal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xxl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-content h1 {
+  margin-bottom: var(--spacing-s);
+}
+
+.patient-info-card {
+  margin-bottom: var(--spacing-xl);
+}
+
+.patient-basic {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+}
+
+.patient-details {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+  margin-top: var(--spacing-m);
+  flex-wrap: wrap;
+}
+
+.patient-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s);
+}
+
+.alert-item {
+  padding: var(--spacing-m);
+  background-color: var(--color-warning);
+  color: var(--color-white);
+  border-radius: var(--radius-button);
+  font-size: var(--font-size-small);
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.history-list,
+.medications-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.history-item {
+  display: flex;
+  gap: var(--spacing-l);
+  padding: var(--spacing-m);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-button);
+}
+
+.history-date {
+  font-family: var(--font-mono);
+  color: var(--color-text-light);
+  min-width: 100px;
+}
+
+.history-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.medication-item {
+  padding: var(--spacing-m);
+  background-color: var(--color-hover-bg);
+  border-radius: var(--radius-button);
+}
+
+.emergency-contacts,
+.access-grant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+@media (max-width: 1024px) {
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-basic {
+    flex-direction: column;
+  }
+}
+
