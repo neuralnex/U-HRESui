@@ -9,6 +9,9 @@ import { PatientProfile } from './pages/doctor/PatientProfile';
 import { PatientSearch } from './pages/doctor/PatientSearch';
 import { CreateUHID } from './pages/uhid/CreateUHID';
 import { CreateVisit } from './pages/doctor/CreateVisit';
+import { CreatePrescription } from './pages/doctor/CreatePrescription';
+import { CreateLabTest } from './pages/doctor/CreateLabTest';
+import { ReferPatient } from './pages/doctor/ReferPatient';
 import { AIInsights } from './pages/doctor/AIInsights';
 import { HospitalAdminDashboard } from './pages/admin/HospitalAdminDashboard';
 import { HospitalManagement } from './pages/admin/HospitalManagement';
@@ -91,6 +94,30 @@ function AppRoutes() {
         element={
           <ProtectedRoute requiredRole="doctor">
             <CreateVisit />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/patients/:id/prescription"
+        element={
+          <ProtectedRoute requiredRole="doctor">
+            <CreatePrescription />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/patients/:id/lab-test"
+        element={
+          <ProtectedRoute requiredRole="doctor">
+            <CreateLabTest />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/patients/:id/refer"
+        element={
+          <ProtectedRoute requiredRole="doctor">
+            <ReferPatient />
           </ProtectedRoute>
         }
       />

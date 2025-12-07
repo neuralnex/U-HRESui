@@ -5,6 +5,7 @@ import { MainLayout } from '../../components/layout/MainLayout';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
+import { patientService } from '../../services/patient.service';
 import './DoctorDashboard.css';
 
 export const DoctorDashboard: React.FC = () => {
@@ -20,8 +21,27 @@ export const DoctorDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      setTodayPatients([]);
-      setAiHighlights([]);
+      
+      // Load today's patients
+      try {
+        const todayResponse = await patientService.getTodayPatients();
+        if (todayResponse.success) {
+          setTodayPatients(todayResponse.data || []);
+        }
+      } catch (error) {
+        console.error('Failed to load today patients:', error);
+        setTodayPatients([]);
+      }
+
+      // Load AI highlights (from recent visits with AI analysis)
+      try {
+        // For now, we'll create mock highlights based on recent activity
+        // In a full implementation, this would call an AI highlights API
+        setAiHighlights([]);
+      } catch (error) {
+        console.error('Failed to load AI highlights:', error);
+        setAiHighlights([]);
+      }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
       setTodayPatients([]);
@@ -98,18 +118,19 @@ export const DoctorDashboard: React.FC = () => {
               ) : todayPatients.length > 0 ? (
                 <>
                   <div className="patients-list">
-                    {todayPatients.map((patient, index) => (
-                      <div key={index} className="patient-item">
-                        <div className="patient-info">
-                          <h4 className="text-card-title">{patient.name}</h4>
-                          <p className="text-small text-mono text-light">{patient.uhid}</p>
-                          <p className="text-small">{patient.summary}</p>
-                        </div>
-                        <Badge variant={patient.status === 'active' ? 'warning' : 'success'}>
-                          {patient.status}
-                        </Badge>
+                  {todayPatients.map((patient, index) => (
+                    <div key={index} className="patient-item" onClick={() => navigate(`/doctor/patients/${patient.uhid}`)} style={{ cursor: 'pointer' }}>
+                      <div className="patient-info">
+                        <h4 className="text-card-title">{patient.name}</h4>
+                        <p className="text-small text-mono text-light">{patient.uhid}</p>
+                        <p className="text-small">{patient.summary}</p>
+                        {patient.department && <p className="text-small text-light">{patient.department}</p>}
                       </div>
-                    ))}
+                      <Badge variant={patient.status === 'emergency' ? 'error' : patient.status === 'active' ? 'warning' : 'success'}>
+                        {patient.status}
+                      </Badge>
+                    </div>
+                  ))}
                   </div>
                   <Button variant="outline" fullWidth className="m-t" onClick={() => navigate('/doctor/search')}>
                     View All Patients

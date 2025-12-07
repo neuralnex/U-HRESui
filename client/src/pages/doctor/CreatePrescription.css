@@ -1,0 +1,60 @@
+.create-prescription {
+  max-width: var(--max-page-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xxl);
+}
+
+.prescription-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-l);
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--spacing-m);
+  justify-content: flex-end;
+  margin-top: var(--spacing-l);
+}
+
+.success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-l);
+  text-align: center;
+  padding: var(--spacing-xxl);
+}
+
+.success-icon {
+  color: var(--color-success);
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+  padding: var(--spacing-m);
+  background-color: #FEE2E2;
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-button);
+  color: var(--color-error);
+  font-size: var(--font-size-small);
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+

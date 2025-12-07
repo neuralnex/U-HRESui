@@ -106,13 +106,25 @@ export const PatientProfile: React.FC = () => {
             >
               New Visit
             </Button>
-            <Button variant="secondary" icon={<Pill size={16} />}>
+            <Button 
+              variant="secondary" 
+              icon={<Pill size={16} />}
+              onClick={() => navigate(`/doctor/patients/${patient.uhid}/prescription`)}
+            >
               Make Prescription
             </Button>
-            <Button variant="secondary" icon={<FlaskConical size={16} />}>
+            <Button 
+              variant="secondary" 
+              icon={<FlaskConical size={16} />}
+              onClick={() => navigate(`/doctor/patients/${patient.uhid}/lab-test`)}
+            >
               Order Lab Test
             </Button>
-            <Button variant="outline" icon={<Send size={16} />}>
+            <Button 
+              variant="outline" 
+              icon={<Send size={16} />}
+              onClick={() => navigate(`/doctor/patients/${patient.uhid}/refer`)}
+            >
               Refer Patient
             </Button>
           </div>
@@ -246,13 +258,28 @@ export const PatientProfile: React.FC = () => {
           <div className="patient-sidebar">
             <Card title="Quick Actions">
               <div className="sidebar-actions">
-                <Button variant="primary" fullWidth icon={<Pill size={16} />}>
+                <Button 
+                  variant="primary" 
+                  fullWidth 
+                  icon={<Pill size={16} />}
+                  onClick={() => navigate(`/doctor/patients/${patient.uhid}/prescription`)}
+                >
                   Make Prescription
                 </Button>
-                <Button variant="secondary" fullWidth icon={<FlaskConical size={16} />}>
+                <Button 
+                  variant="secondary" 
+                  fullWidth 
+                  icon={<FlaskConical size={16} />}
+                  onClick={() => navigate(`/doctor/patients/${patient.uhid}/lab-test`)}
+                >
                   Order Lab Test
                 </Button>
-                <Button variant="outline" fullWidth icon={<Send size={16} />}>
+                <Button 
+                  variant="outline" 
+                  fullWidth 
+                  icon={<Send size={16} />}
+                  onClick={() => navigate(`/doctor/patients/${patient.uhid}/refer`)}
+                >
                   Refer Patient
                 </Button>
                 <Button
