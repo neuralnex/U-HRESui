@@ -26,7 +26,7 @@ export interface CreateHospitalData {
 }
 
 export const hospitalService = {
-  async getAllHospitals(params?: { type?: string; state?: string; isActive?: boolean }) {
+  async getAllHospitals(params?: { type?: string; state?: string; isActive?: boolean; isVerified?: boolean }) {
     const response = await api.get('/hospitals', { params });
     return response.data;
   },

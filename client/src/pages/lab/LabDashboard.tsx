@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '../../components/layout/MainLayout';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
-import { Select } from '../../components/common/Select';
 import { patientService } from '../../services/patient.service';
 import { aiService } from '../../services/ai.service';
 import { Upload, CheckCircle, AlertCircle, Plus, FileText } from 'lucide-react';
 import './LabDashboard.css';
 
 export const LabDashboard: React.FC = () => {
-  const navigate = useNavigate();
   const [uhid, setUhid] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [pendingResults, setPendingResults] = useState<any[]>([]);
@@ -21,7 +18,6 @@ export const LabDashboard: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [extracting, setExtracting] = useState(false);
   const [error, setError] = useState('');
-  const [showLabResultModal, setShowLabResultModal] = useState(false);
   const [showCreateLabModal, setShowCreateLabModal] = useState(false);
   const [selectedResult, setSelectedResult] = useState<any>(null);
   const [labResultForm, setLabResultForm] = useState({
@@ -104,6 +100,25 @@ export const LabDashboard: React.FC = () => {
     } finally {
       setExtracting(false);
     }
+  };
+
+  const handleOpenCreateModal = () => {
+    setUhid('');
+    setLabResultForm({
+      testDate: new Date().toISOString().slice(0, 16),
+      testName: '',
+      testType: '',
+      result: '',
+      unit: '',
+      referenceRange: '',
+      status: 'Normal',
+      labTechnicianId: '',
+      reviewedBy: '',
+      notes: '',
+    });
+    setAiExtractedData(null);
+    setError('');
+    setShowCreateLabModal(true);
   };
 
   const handleCreateLabResult = async () => {
@@ -232,10 +247,10 @@ export const LabDashboard: React.FC = () => {
                 <Button 
                   variant="secondary" 
                   fullWidth
-                  onClick={handleSubmitLabResult}
+                  onClick={handleOpenCreateModal}
                   disabled={!uhid}
                 >
-                  Submit to Hospital
+                  Create Lab Result
                 </Button>
               </div>
             </div>
