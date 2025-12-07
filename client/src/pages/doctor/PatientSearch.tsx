@@ -25,31 +25,31 @@ export const PatientSearch: React.FC = () => {
 
     try {
       const uhid = searchQuery.trim().toUpperCase();
-      const [uhidData, patientData] = await Promise.allSettled([
-        uhidService.getUHID(uhid),
-        patientService.getPatientRecord(uhid),
-      ]);
-
-      const results: any[] = [];
-
-      if (uhidData.status === 'fulfilled' && uhidData.value.success) {
-        results.push({
+      
+      // Try to get UHID first (central record)
+      const uhidResponse = await uhidService.getUHID(uhid);
+      
+      if (uhidResponse.success && uhidResponse.data) {
+        // Use UHID data as the primary source, avoid duplicate lookups
+        setResults([{
           type: 'uhid',
-          data: uhidData.value.data,
-        });
-      }
-
-      if (patientData.status === 'fulfilled' && patientData.value.success) {
-        results.push({
-          type: 'patient',
-          data: patientData.value.data,
-        });
-      }
-
-      if (results.length === 0) {
-        setError('No patient found with this UHID');
+          data: uhidResponse.data,
+        }]);
       } else {
-        setResults(results);
+        // If UHID not found, try patient record (hospital-specific)
+        try {
+          const patientResponse = await patientService.getPatientRecord(uhid);
+          if (patientResponse.success && patientResponse.data) {
+            setResults([{
+              type: 'patient',
+              data: patientResponse.data,
+            }]);
+          } else {
+            setError('No patient found with this UHID');
+          }
+        } catch (err: any) {
+          setError('No patient found with this UHID');
+        }
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Search failed');
