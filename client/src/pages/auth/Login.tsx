@@ -14,7 +14,8 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [hospitalCode, setHospitalCode] = useState('');
   const [apiKey, setApiKey] = useState('');
-  const [role, setRole] = useState<'doctor' | 'admin' | 'lab' | 'central'>('doctor');
+  const [role, setRole] = useState<'doctor' | 'admin' | 'lab' | 'central' | 'patient'>('doctor');
+  const [uhid, setUhid] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +30,10 @@ export const Login: React.FC = () => {
         credentials = {
           username: email,
           password: password,
+        };
+      } else if (role === 'patient') {
+        credentials = {
+          uhid: uhid,
         };
       } else {
         credentials = {
@@ -51,6 +56,9 @@ export const Login: React.FC = () => {
           break;
         case 'central':
           navigate('/central');
+          break;
+        case 'patient':
+          navigate('/patient');
           break;
       }
     } catch (err: any) {
@@ -95,6 +103,12 @@ export const Login: React.FC = () => {
               >
                 Central Admin
               </button>
+              <button
+                className={`role-btn ${role === 'patient' ? 'active' : ''}`}
+                onClick={() => setRole('patient')}
+              >
+                Patient
+              </button>
             </div>
 
             {role === 'central' ? (
@@ -116,6 +130,20 @@ export const Login: React.FC = () => {
                   icon={<Lock size={20} />}
                   fullWidth
                 />
+              </>
+            ) : role === 'patient' ? (
+              <>
+                <Input
+                  label="UHID"
+                  placeholder="Enter your Universal Health ID"
+                  value={uhid}
+                  onChange={setUhid}
+                  icon={<User size={20} />}
+                  fullWidth
+                />
+                <p className="text-small text-light">
+                  Don't have a UHID? <a href="#" onClick={(e) => { e.preventDefault(); navigate('/patient/register'); }}>Register here</a>
+                </p>
               </>
             ) : (
               <>
@@ -153,9 +181,11 @@ export const Login: React.FC = () => {
             <p className="login-footer text-small text-light">
               Forgot hospital code? <a href="#" onClick={(e) => { e.preventDefault(); /* TODO: Implement forgot code */ }}>Recover here</a>
             </p>
-            <p className="login-footer text-small text-light">
-              New hospital? <a href="/register" onClick={(e) => { e.preventDefault(); navigate('/register'); }}>Register here</a>
-            </p>
+            {role !== 'patient' && (
+              <p className="login-footer text-small text-light">
+                New hospital? <a href="/register" onClick={(e) => { e.preventDefault(); navigate('/register'); }}>Register here</a>
+              </p>
+            )}
           </div>
         </Card>
       </div>

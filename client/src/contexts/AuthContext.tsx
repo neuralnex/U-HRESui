@@ -9,7 +9,8 @@ interface User {
   username?: string;
   name?: string;
   email?: string;
-  role: 'doctor' | 'admin' | 'lab' | 'central';
+  uhid?: string;
+  role: 'doctor' | 'admin' | 'lab' | 'central' | 'patient';
   permissions?: string[];
   isSuperAdmin?: boolean;
 }
@@ -17,7 +18,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (role: 'doctor' | 'admin' | 'lab' | 'central', credentials: any) => Promise<void>;
+  login: (role: 'doctor' | 'admin' | 'lab' | 'central' | 'patient', credentials: any) => Promise<void>;
   logout: () => Promise<void>;
   isAuthenticated: boolean;
   loading: boolean;
@@ -41,7 +42,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setLoading(false);
   }, []);
 
-  const login = async (role: 'doctor' | 'admin' | 'lab' | 'central', credentials: any) => {
+  const login = async (role: 'doctor' | 'admin' | 'lab' | 'central' | 'patient', credentials: any) => {
     try {
       let response: AuthResponse;
 
@@ -62,6 +63,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user', JSON.stringify(userData));
+        }
+      } else if (role === 'patient') {
+        response = await authService.loginPatient(credentials);
+        if (response.success && response.data.uhid) {
+          const uhid = response.data.uhid;
+          const userData: User = {
+            id: uhid.id,
+            uhid: uhid.uhid,
+            name: `${uhid.firstName} ${uhid.lastName}`,
+            email: uhid.email,
+            role: 'patient',
+          };
+          // Clear any old cached data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setUser(userData);
+          setToken(response.data.token);
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('user', JSON.stringify(userData));
+          console.log('Logged in patient:', userData.uhid);
         }
       } else {
         response = await authService.loginHospital(credentials);

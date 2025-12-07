@@ -12,6 +12,29 @@ export interface CreateUHIDData {
   state?: string;
   lga?: string;
   profilePicture?: string;
+  // Identity Verification
+  ninNumber?: string;
+  // Medical Background
+  bloodGroup?: string;
+  genotype?: string;
+  allergies?: string;
+  underlyingConditions?: string;
+  emergencyMedicalNotes?: string;
+  // Emergency Contacts
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  emergencyContactRelationship?: string;
+  // Optional fields (for profile section)
+  smokingStatus?: string;
+  alcoholUse?: string;
+  exerciseLevel?: string;
+  dietaryPreferences?: string;
+  healthInsuranceProvider?: string;
+  insurancePolicyNumber?: string;
+  employmentStatus?: string;
+  educationLevel?: string;
+  maritalStatus?: string;
+  householdSize?: number;
 }
 
 export interface UHID {

@@ -1,3 +1,9 @@
+.form-section-divider {
+  margin: 2rem 0;
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
+}
+
 .create-uhid {
   max-width: var(--max-page-width);
   width: 100%;

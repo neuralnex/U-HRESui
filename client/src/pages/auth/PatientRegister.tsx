@@ -1,29 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MainLayout } from '../../components/layout/MainLayout';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
-import { WebcamCapture } from '../../components/common/WebcamCapture';
-import { uhidService } from '../../services/uhid.service';
-import type { CreateUHIDData } from '../../services/uhid.service';
-import { CheckCircle, AlertCircle, Camera, Upload } from 'lucide-react';
-import './CreateUHID.css';
+import { patientAuthService } from '../../services/patientAuth.service';
+import { CheckCircle, AlertCircle } from 'lucide-react';
+import './RegisterHospital.css';
 
-export const CreateUHID: React.FC = () => {
+export const PatientRegister: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<CreateUHIDData>({
+  const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     middleName: '',
     dateOfBirth: '',
-    gender: 'Male',
-    phoneNumber: '',
+    gender: 'Male' as 'Male' | 'Female' | 'Other',
     email: '',
+    phoneNumber: '',
     address: '',
     state: '',
     lga: '',
-    profilePicture: '',
     ninNumber: '',
     bloodGroup: '',
     genotype: '',
@@ -34,51 +30,10 @@ export const CreateUHID: React.FC = () => {
     emergencyContactPhone: '',
     emergencyContactRelationship: '',
   });
-  const [showWebcam, setShowWebcam] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [createdUHID, setCreatedUHID] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const compressImage = (dataUrl: string, callback: (compressed: string) => void) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const maxWidth = 800;
-      const maxHeight = 800;
-      let width = img.width;
-      let height = img.height;
-
-      if (width > height) {
-        if (width > maxWidth) {
-          height = (height * maxWidth) / width;
-          width = maxWidth;
-        }
-      } else {
-        if (height > maxHeight) {
-          width = (width * maxHeight) / height;
-          height = maxHeight;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.drawImage(img, 0, 0, width, height);
-        const compressed = canvas.toDataURL('image/jpeg', 0.7);
-        callback(compressed);
-      } else {
-        callback(dataUrl);
-      }
-    };
-    img.onerror = () => {
-      callback(dataUrl);
-    };
-    img.src = dataUrl;
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,16 +41,13 @@ export const CreateUHID: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await uhidService.createUHID(formData);
+      const response = await patientAuthService.register(formData);
       if (response.success) {
-        setCreatedUHID(response.data.uhid);
+        setCreatedUHID(response.data.uhid.uhid);
         setSuccess(true);
-        setTimeout(() => {
-          navigate(`/doctor/patients/${response.data.uhid}`);
-        }, 2000);
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error?.message || err.response?.data?.message || err.message || 'Failed to create UHID';
+      const errorMessage = err.response?.data?.error?.message || err.response?.data?.message || err.message || 'Failed to register';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -104,31 +56,35 @@ export const CreateUHID: React.FC = () => {
 
   if (success) {
     return (
-      <MainLayout role="doctor">
-        <div className="create-uhid-success">
+      <div className="register-page">
+        <div className="register-container">
           <Card>
             <div className="success-content">
               <CheckCircle size={48} className="success-icon" />
-              <h2 className="text-section-title">UHID Created Successfully!</h2>
-              <p className="text-body">UHID: <strong className="text-mono">{createdUHID}</strong></p>
-              <p className="text-small text-light">Redirecting to patient profile...</p>
+              <h2 className="text-section-title">Registration Successful!</h2>
+              <p className="text-body">Your UHID: <strong className="text-mono">{createdUHID}</strong></p>
+              <p className="text-small text-light">Please check your email ({formData.email}) for your UHID details.</p>
+              <p className="text-small text-light">You can now use this UHID to log in and access your medical records.</p>
+              <Button variant="primary" onClick={() => navigate('/login')} className="m-t">
+                Go to Login
+              </Button>
             </div>
           </Card>
         </div>
-      </MainLayout>
+      </div>
     );
   }
 
   return (
-    <MainLayout role="doctor">
-      <div className="create-uhid">
-        <div className="page-header">
-          <h1 className="text-page-title">Register New Patient</h1>
-          <p className="text-body text-light">Create a new Universal Health ID</p>
+    <div className="register-page">
+      <div className="register-container">
+        <div className="register-header">
+          <h1 className="text-page-title">Patient Registration</h1>
+          <p className="text-body text-light">Create your Universal Health ID</p>
         </div>
 
-        <Card title="Basic Patient Information">
-          <form onSubmit={handleSubmit} className="uhid-form">
+        <Card title="Patient Registration">
+          <form onSubmit={handleSubmit} className="register-form">
             <div className="form-row">
               <Input
                 label="First Name *"
@@ -149,7 +105,7 @@ export const CreateUHID: React.FC = () => {
             <div className="form-row">
               <Input
                 label="Middle Name"
-                value={formData.middleName || ''}
+                value={formData.middleName}
                 onChange={(value) => setFormData({ ...formData, middleName: value })}
                 fullWidth
               />
@@ -178,24 +134,25 @@ export const CreateUHID: React.FC = () => {
                 </select>
               </div>
               <Input
-                label="Phone Number"
-                value={formData.phoneNumber || ''}
-                onChange={(value) => setFormData({ ...formData, phoneNumber: value })}
+                label="Email *"
+                type="email"
+                value={formData.email}
+                onChange={(value) => setFormData({ ...formData, email: value })}
                 fullWidth
+                required
               />
             </div>
 
             <Input
-              label="Email"
-              type="email"
-              value={formData.email || ''}
-              onChange={(value) => setFormData({ ...formData, email: value })}
+              label="Phone Number"
+              value={formData.phoneNumber}
+              onChange={(value) => setFormData({ ...formData, phoneNumber: value })}
               fullWidth
             />
 
             <Input
               label="Address"
-              value={formData.address || ''}
+              value={formData.address}
               onChange={(value) => setFormData({ ...formData, address: value })}
               fullWidth
             />
@@ -203,13 +160,13 @@ export const CreateUHID: React.FC = () => {
             <div className="form-row">
               <Input
                 label="State"
-                value={formData.state || ''}
+                value={formData.state}
                 onChange={(value) => setFormData({ ...formData, state: value })}
                 fullWidth
               />
               <Input
                 label="LGA"
-                value={formData.lga || ''}
+                value={formData.lga}
                 onChange={(value) => setFormData({ ...formData, lga: value })}
                 fullWidth
               />
@@ -219,12 +176,11 @@ export const CreateUHID: React.FC = () => {
             <h3 className="text-section-title">Identity Verification</h3>
             <Input
               label="NIN Number"
-              value={formData.ninNumber || ''}
+              value={formData.ninNumber}
               onChange={(value) => setFormData({ ...formData, ninNumber: value })}
               fullWidth
               placeholder="National Identification Number"
             />
-            <p className="text-small text-light">Used for duplicate prevention</p>
 
             <div className="form-section-divider"></div>
             <h3 className="text-section-title">Medical Background</h3>
@@ -233,7 +189,7 @@ export const CreateUHID: React.FC = () => {
                 <label className="input-label">Blood Group</label>
                 <select
                   className="input"
-                  value={formData.bloodGroup || ''}
+                  value={formData.bloodGroup}
                   onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
                 >
                   <option value="">Select Blood Group</option>
@@ -251,7 +207,7 @@ export const CreateUHID: React.FC = () => {
                 <label className="input-label">Genotype</label>
                 <select
                   className="input"
-                  value={formData.genotype || ''}
+                  value={formData.genotype}
                   onChange={(e) => setFormData({ ...formData, genotype: e.target.value })}
                 >
                   <option value="">Select Genotype (if available)</option>
@@ -267,46 +223,43 @@ export const CreateUHID: React.FC = () => {
 
             <Input
               label="Allergies"
-              value={formData.allergies || ''}
+              value={formData.allergies}
               onChange={(value) => setFormData({ ...formData, allergies: value })}
               fullWidth
               placeholder="e.g., Penicillin, Peanuts, Dust (comma-separated)"
             />
-            <p className="text-small text-light">List drug, food, or environmental allergies</p>
 
             <Input
               label="Underlying Conditions"
-              value={formData.underlyingConditions || ''}
+              value={formData.underlyingConditions}
               onChange={(value) => setFormData({ ...formData, underlyingConditions: value })}
               fullWidth
               placeholder="e.g., Diabetes, Hypertension, Asthma (comma-separated)"
             />
-            <p className="text-small text-light">List any chronic or underlying medical conditions</p>
 
             <div className="input-wrapper input-full-width">
               <label className="input-label">Emergency Medical Notes</label>
               <textarea
                 className="textarea"
                 rows={4}
-                value={formData.emergencyMedicalNotes || ''}
+                value={formData.emergencyMedicalNotes}
                 onChange={(e) => setFormData({ ...formData, emergencyMedicalNotes: e.target.value })}
                 placeholder="e.g., Seizures, Implants, Pregnancy, Pacemaker, etc."
               />
             </div>
-            <p className="text-small text-light">Important medical information for emergency situations</p>
 
             <div className="form-section-divider"></div>
             <h3 className="text-section-title">Emergency Contacts</h3>
             <Input
               label="Emergency Contact Name"
-              value={formData.emergencyContactName || ''}
+              value={formData.emergencyContactName}
               onChange={(value) => setFormData({ ...formData, emergencyContactName: value })}
               fullWidth
             />
             <div className="form-row">
               <Input
                 label="Emergency Contact Phone"
-                value={formData.emergencyContactPhone || ''}
+                value={formData.emergencyContactPhone}
                 onChange={(value) => setFormData({ ...formData, emergencyContactPhone: value })}
                 fullWidth
               />
@@ -314,7 +267,7 @@ export const CreateUHID: React.FC = () => {
                 <label className="input-label">Relationship to Patient</label>
                 <select
                   className="input"
-                  value={formData.emergencyContactRelationship || ''}
+                  value={formData.emergencyContactRelationship}
                   onChange={(e) => setFormData({ ...formData, emergencyContactRelationship: e.target.value })}
                 >
                   <option value="">Select Relationship</option>
@@ -329,110 +282,6 @@ export const CreateUHID: React.FC = () => {
               </div>
             </div>
 
-            <div className="form-section-divider"></div>
-            <div className="profile-picture-section">
-              <label className="input-label">Profile Picture *</label>
-              {!showWebcam && !formData.profilePicture && (
-                <div className="picture-options">
-                  <div className="picture-option-buttons">
-                    <Button
-                      variant="secondary"
-                      icon={<Camera size={16} />}
-                      onClick={() => setShowWebcam(true)}
-                      fullWidth
-                    >
-                      Capture Photo
-                    </Button>
-                    <Button
-                      variant="outline"
-                      icon={<Upload size={16} />}
-                      onClick={() => fileInputRef.current?.click()}
-                      fullWidth
-                    >
-                      Upload Photo
-                    </Button>
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          const imageDataUrl = reader.result as string;
-                          compressImage(imageDataUrl, (compressed) => {
-                            setFormData({ ...formData, profilePicture: compressed });
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  <p className="text-small text-light">
-                    Take a photo or upload an existing image for patient identification
-                  </p>
-                </div>
-              )}
-              {showWebcam && (
-                <div className="webcam-container">
-                  <WebcamCapture
-                    onCapture={(imageDataUrl) => {
-                      compressImage(imageDataUrl, (compressed) => {
-                        setFormData({ ...formData, profilePicture: compressed });
-                        setShowWebcam(false);
-                      });
-                    }}
-                    onCancel={() => setShowWebcam(false)}
-                  />
-                </div>
-              )}
-              {formData.profilePicture && !showWebcam && (
-                <div className="profile-preview">
-                  <img src={formData.profilePicture} alt="Profile" className="profile-image" />
-                  <div className="profile-actions">
-                    <Button
-                      variant="outline"
-                      icon={<Camera size={16} />}
-                      onClick={() => setShowWebcam(true)}
-                    >
-                      Retake
-                    </Button>
-                    <Button
-                      variant="outline"
-                      icon={<Upload size={16} />}
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      Change
-                    </Button>
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    style={{ display: 'none' }}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          const imageDataUrl = reader.result as string;
-                          compressImage(imageDataUrl, (compressed) => {
-                            setFormData({ ...formData, profilePicture: compressed });
-                          });
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-
             {error && (
               <div className="form-error">
                 <AlertCircle size={16} />
@@ -441,21 +290,21 @@ export const CreateUHID: React.FC = () => {
             )}
 
             <div className="form-actions">
-              <Button variant="secondary" onClick={() => navigate(-1)}>
+              <Button variant="secondary" onClick={() => navigate('/login')}>
                 Cancel
               </Button>
               <Button
                 variant="primary"
                 type="submit"
-                disabled={loading || !formData.profilePicture}
+                disabled={loading || !formData.firstName || !formData.lastName || !formData.dateOfBirth || !formData.gender || !formData.email}
               >
-                {loading ? 'Creating...' : 'Create UHID'}
+                {loading ? 'Registering...' : 'Register'}
               </Button>
             </div>
           </form>
         </Card>
       </div>
-    </MainLayout>
+    </div>
   );
 };
 

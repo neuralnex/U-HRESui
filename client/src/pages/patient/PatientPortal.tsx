@@ -1,51 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
-import { Download, UserPlus, FileText, Pill } from 'lucide-react';
-import { uhidService } from '../../services/uhid.service';
-import { patientService } from '../../services/patient.service';
+import { Download, FileText, Pill, LogOut } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { patientAuthService } from '../../services/patientAuth.service';
 import './PatientPortal.css';
 
 export const PatientPortal: React.FC = () => {
-  const { uhid: uhidParam } = useParams<{ uhid: string }>();
-  const [uhid, setUhid] = useState(uhidParam || '');
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [patient, setPatient] = useState<any>(null);
-  const [medicalHistory, setMedicalHistory] = useState<any[]>([]);
-  const [medications, setMedications] = useState<any[]>([]);
+  const [records, setRecords] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
-    if (uhid) {
+    if (user && user.role === 'patient') {
       loadPatientData();
     }
-  }, [uhid]);
+  }, [user]);
 
   const loadPatientData = async () => {
-    if (!uhid) return;
-    
     try {
       setLoading(true);
-      const [uhidResponse, summaryResponse] = await Promise.all([
-        uhidService.getUHID(uhid),
-        patientService.getPatientSummary(uhid).catch(() => null),
+      const [profileResponse, recordsResponse] = await Promise.all([
+        patientAuthService.getProfile(),
+        patientAuthService.getRecords().catch(() => null),
       ]);
 
-      if (uhidResponse.success && uhidResponse.data) {
-        const uhidData = uhidResponse.data;
+      if (profileResponse.success && profileResponse.data) {
+        const uhidData = profileResponse.data;
         setPatient({
           name: `${uhidData.firstName} ${uhidData.lastName}`,
+          uhid: uhidData.uhid,
           age: uhidData.dateOfBirth ? Math.floor((new Date().getTime() - new Date(uhidData.dateOfBirth).getTime()) / (1000 * 60 * 60 * 24 * 365)) : null,
           gender: uhidData.gender,
-          bloodGroup: null,
-          allergies: [],
+          bloodGroup: uhidData.bloodGroup,
+          allergies: uhidData.allergies ? uhidData.allergies.split(',').map((a: string) => a.trim()) : [],
         });
       }
 
-      if (summaryResponse?.success && summaryResponse.data) {
-        setMedicalHistory(summaryResponse.data.visits || []);
-        setMedications(summaryResponse.data.prescriptions || []);
+      if (recordsResponse?.success) {
+        setRecords(recordsResponse.data);
       }
     } catch (error) {
       console.error('Failed to load patient data:', error);
@@ -54,6 +52,38 @@ export const PatientPortal: React.FC = () => {
     }
   };
 
+  const handleDownload = async (format: 'json' | 'pdf' = 'json') => {
+    try {
+      setDownloading(true);
+      await patientAuthService.downloadRecords(format);
+    } catch (error) {
+      console.error('Failed to download records:', error);
+      alert('Failed to download records. Please try again.');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
+  if (!user || user.role !== 'patient') {
+    return (
+      <div className="patient-portal">
+        <Card>
+          <div className="empty-state">
+            <p className="text-body text-light">Please log in as a patient to access your records.</p>
+            <Button variant="primary" onClick={() => navigate('/login')}>
+              Go to Login
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="patient-portal">
       <div className="portal-header">
@@ -61,29 +91,22 @@ export const PatientPortal: React.FC = () => {
           <h1 className="text-page-title">My Medical Records</h1>
           <p className="text-body text-light">Access your complete medical history</p>
         </div>
-        <Button variant="primary" icon={<Download size={16} />}>
-          Download All Records
-        </Button>
+        <div className="header-actions">
+          <Button 
+            variant="primary" 
+            icon={<Download size={16} />}
+            onClick={() => handleDownload('json')}
+            disabled={downloading}
+          >
+            {downloading ? 'Downloading...' : 'Download Records'}
+          </Button>
+          <Button variant="outline" icon={<LogOut size={16} />} onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
       </div>
 
-      {!uhid ? (
-        <Card>
-          <div className="empty-state">
-            <p className="text-body text-light">Please enter your UHID to view your medical records</p>
-            <input
-              type="text"
-              placeholder="Enter your UHID"
-              value={uhid}
-              onChange={(e) => setUhid(e.target.value)}
-              className="input"
-              style={{ marginTop: '1rem', padding: '0.75rem', width: '100%' }}
-            />
-            <Button variant="primary" onClick={loadPatientData} className="m-t">
-              Load Records
-            </Button>
-          </div>
-        </Card>
-      ) : loading ? (
+      {loading ? (
         <Card>
           <p className="text-body text-light">Loading patient data...</p>
         </Card>
@@ -94,7 +117,7 @@ export const PatientPortal: React.FC = () => {
               <div>
                 <h2 className="text-section-title">{patient.name}</h2>
                 <div className="patient-details">
-                  <Badge variant="info">{uhid}</Badge>
+                  <Badge variant="info">{patient.uhid}</Badge>
                   {patient.age && <span>{patient.age} years, {patient.gender}</span>}
                   {patient.bloodGroup && <span>Blood Group: {patient.bloodGroup}</span>}
                 </div>
@@ -117,12 +140,12 @@ export const PatientPortal: React.FC = () => {
         </Card>
       )}
 
-      {patient && (
+      {records && (
         <div className="portal-grid">
           <Card title="Medical History" icon={<FileText size={20} />}>
-            {medicalHistory.length > 0 ? (
+            {records.localRecords?.visits && records.localRecords.visits.length > 0 ? (
               <div className="history-list">
-                {medicalHistory.map((record, index) => (
+                {records.localRecords.visits.map((record: any, index: number) => (
                   <div key={record.id || index} className="history-item">
                     <div className="history-date">{new Date(record.visitDate || record.date).toLocaleDateString()}</div>
                     <div className="history-details">
@@ -141,9 +164,9 @@ export const PatientPortal: React.FC = () => {
           </Card>
 
           <Card title="Current Medications" icon={<Pill size={20} />}>
-            {medications.length > 0 ? (
+            {records.localRecords?.prescriptions && records.localRecords.prescriptions.length > 0 ? (
               <div className="medications-list">
-                {medications.map((med, index) => (
+                {records.localRecords.prescriptions.map((med: any, index: number) => (
                   <div key={med.id || index} className="medication-item">
                     <div>
                       <strong>{med.medicationName || med.name}</strong>
@@ -164,24 +187,6 @@ export const PatientPortal: React.FC = () => {
         </div>
       )}
 
-      <Card title="Emergency Contacts">
-        <div className="emergency-contacts">
-          <Button variant="outline" icon={<UserPlus size={16} />}>
-            Add Emergency Contact
-          </Button>
-        </div>
-      </Card>
-
-      <Card title="Grant Temporary Access">
-        <div className="access-grant">
-          <p className="text-body text-light">
-            Grant temporary access to a healthcare provider
-          </p>
-          <Button variant="secondary">
-            Grant Access
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 };

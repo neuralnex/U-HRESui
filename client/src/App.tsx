@@ -17,6 +17,7 @@ import { LabDashboard } from './pages/lab/LabDashboard';
 import { CentralAdminDashboard } from './pages/central/CentralAdminDashboard';
 import { InterHospitalExchange } from './pages/exchange/InterHospitalExchange';
 import { PatientPortal } from './pages/patient/PatientPortal';
+import { PatientRegister } from './pages/auth/PatientRegister';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; requiredRole?: string }> = ({
   children,
@@ -141,7 +142,15 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/patient" element={<PatientPortal />} />
+      <Route
+        path="/patient"
+        element={
+          <ProtectedRoute requiredRole="patient">
+            <PatientPortal />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/patient/register" element={<PatientRegister />} />
     </Routes>
   );
 }

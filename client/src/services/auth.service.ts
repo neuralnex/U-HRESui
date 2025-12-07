@@ -28,6 +28,7 @@ export interface AuthResponse {
     token: string;
     hospital?: any;
     admin?: any;
+    uhid?: any;
   };
   message?: string;
 }
@@ -68,6 +69,16 @@ export const authService = {
 
   async forgotCode(email: string) {
     const response = await api.post('/auth/forgot-code', { email });
+    return response.data;
+  },
+
+  async loginPatient(data: { uhid: string }): Promise<AuthResponse> {
+    const response = await api.post('/auth/patient/login', data);
+    return response.data;
+  },
+
+  async registerPatient(data: any): Promise<AuthResponse> {
+    const response = await api.post('/auth/patient/register', data);
     return response.data;
   },
 };
