@@ -25,11 +25,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   const displayName = hospitalName || user?.name || 'U-HRES';
-  
-  // Debug: Log the display name to help troubleshoot
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Navbar displayName:', displayName, 'user:', user, 'hospitalName prop:', hospitalName);
-  }
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);

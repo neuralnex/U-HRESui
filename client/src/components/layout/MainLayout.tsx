@@ -18,11 +18,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   const { user } = useAuth();
   const displayName = hospitalName || user?.name || 'U-HRES';
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
-  // Debug: Log to help troubleshoot hospital name
-  if (process.env.NODE_ENV === 'development') {
-    console.log('MainLayout displayName:', displayName, 'user:', user, 'hospitalName prop:', hospitalName);
-  }
 
   return (
     <div className="main-layout">
