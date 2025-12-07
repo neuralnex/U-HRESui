@@ -70,14 +70,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           const userData: User = {
             id: hospital.id,
             hospitalCode: hospital.hospitalCode,
-            name: hospital.name,
+            name: hospital.name || hospital.hospitalName || 'Hospital',
             email: hospital.email,
             role: role === 'lab' ? 'lab' : role === 'admin' ? 'admin' : 'doctor',
           };
+          // Clear any old cached data
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
           setUser(userData);
           setToken(response.data.token);
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user', JSON.stringify(userData));
+          console.log('Logged in hospital:', userData.name);
         }
       }
     } catch (error: any) {
